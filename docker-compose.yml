@@ -1,0 +1,7 @@
+services:
+  hw1:
+    image: Almas2004/cars:latest      
+    container_name: cars_app
+    restart: always
+    ports:
+      - "8485:8080"        
