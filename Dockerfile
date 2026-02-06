@@ -7,8 +7,7 @@ RUN go build -o server main.go
 FROM alpine:latest
 WORKDIR /app
 COPY --from=builder /app/server .
-COPY templates ./templates
-COPY static ./static
+COPY frontend ./frontend
 EXPOSE 8080
 CMD ["./server"]
 
