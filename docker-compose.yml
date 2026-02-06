@@ -1,8 +1,0 @@
-services:
-  app:
-    image: almasik04/cars:latest
-    restart: always
-    ports:
-      - "8686:8686"
-    environment:
-      - DATABASE_URL=${DATABASE_URL}
