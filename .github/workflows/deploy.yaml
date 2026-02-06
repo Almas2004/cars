@@ -1,4 +1,4 @@
-name: Build & Deploy hw1
+name: Build & Deploy PROBN
 on:
   push:
     branches: ["main"]
@@ -17,7 +17,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: Almas2004/cars:latest
+          tags: almasik04/firstvps:latest
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -27,9 +27,9 @@ jobs:
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SHH_KEY }}
-          
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
           script: |
-            cd /var/www/go_1
+            cd /var/www/firstvps
             docker compose pull
             docker compose up -d
