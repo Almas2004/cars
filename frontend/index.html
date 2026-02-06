@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cars App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      padding: 8px 16px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border-bottom: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background: #f0f0f0;
+    }
+
+    .status {
+      margin-bottom: 10px;
+      color: #555;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🚗 Cars</h1>
+    <div class="status" id="status">Загрузка...</div>
+
+    <form id="carForm">
+      <input type="text" id="brand" placeholder="Марка" required />
+      <input type="text" id="model" placeholder="Модель" required />
+      <input type="number" id="price" placeholder="Цена" required />
+      <button type="submit">Добавить</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Марка</th>
+          <th>Модель</th>
+          <th>Цена</th>
+        </tr>
+      </thead>
+      <tbody id="carsTable"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const API = ""; // если фронт и бек на одном сервере оставь пусто
+
+    const table = document.getElementById("carsTable");
+    const statusText = document.getElementById("status");
+    const form = document.getElementById("carForm");
+
+    async function loadCars() {
+      statusText.textContent = "Загрузка списка машин...";
+      table.innerHTML = "";
+
+      try {
+        const res = await fetch(API + "/cars");
+        const cars = await res.json();
+
+        cars.forEach(car => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${car.id}</td>
+            <td>${car.brand}</td>
+            <td>${car.model}</td>
+            <td>${car.price}</td>
+          `;
+          table.appendChild(row);
+        });
+
+        statusText.textContent = "Список обновлён";
+      } catch (err) {
+        statusText.textContent = "Ошибка загрузки";
+        console.error(err);
+      }
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const newCar = {
+        brand: document.getElementById("brand").value,
+        model: document.getElementById("model").value,
+        price: Number(document.getElementById("price").value)
+      };
+
+      try {
+        await fetch(API + "/cars", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newCar)
+        });
+
+        form.reset();
+        loadCars();
+      } catch (err) {
+        alert("Ошибка при добавлении");
+        console.error(err);
+      }
+    });
+
+    loadCars();
+  </script>
+
+</body>
+</html>

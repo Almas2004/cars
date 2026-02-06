@@ -1,7 +1,6 @@
 package main
 
 import (
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"hw2.com/internal/config"
@@ -80,7 +79,7 @@ func main() {
 
 
 	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"status": "OK"})
+		c.File("frontend/index.html")
 	})
 
 	r.Run(":8686")
